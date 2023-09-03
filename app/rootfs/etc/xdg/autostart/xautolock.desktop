@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=xautolock
+Encoding=UTF-8
+Version=0.9.4
+Type=Application
+Comment="Auto Logout X"
+Exec=/usr/bin/xautolock -time 60 -locker "/usr/bin/xfce4-session-logout --logout" -corners ----
+OnlyShowIn=XFCE;
+RunHook=0
+StartupNotify=false
+Terminal=false
+Hidden=true
+

@@ -1,0 +1,7 @@
+[program:ssl-websockify]
+command=/noVNC/websockify/websockify.py --ssl-only --cert=/noVNC/certs/fullchain.pem --key=/noVNC/certs/privkey.pem --web /noVNC/noVNC --unix-target=/tmp/.X11-unix/vnc.sock "%(ENV_SSL_NOVNC_PORT)s"
+autorestart=true
+user=root
+environment=HOME="/",USER="root"
+directory=/
+

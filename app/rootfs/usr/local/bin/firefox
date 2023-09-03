@@ -1,0 +1,24 @@
+#!/bin/sh
+
+export PATH="/usr/bin:/bin"
+
+
+cleanup() {
+	rm -rf "$FIREFOX_HOME"
+	rm -rf "$FIREFOX_CACHE"
+}
+
+trap cleanup 0
+trap cleanup 2
+trap cleanup 3
+
+FIREFOX_HOME="${HOME}/.mozilla"
+FIREFOX_CACHE="${HOME}/.cache/mozilla"
+
+mkdir -m 700 -p "${FIREFOX_HOME}"
+mkdir -m 700 -p "${FIREFOX_CACHE}"
+
+/usr/bin/firefox --private-window "${@}"
+
+cleanup
+

@@ -1,0 +1,24 @@
+#!/bin/sh
+
+export PATH="/usr/bin:/bin"
+
+
+cleanup() {
+	rm -rf "$CHROMIUM_HOME"
+	rm -rf "$CHROMIUM_CACHE"
+}
+
+trap cleanup 0
+trap cleanup 2
+trap cleanup 3
+
+CHROMIUM_HOME="${HOME}/.config/chromium"
+CHROMIUM_CACHE="${HOME}/.cache/chromium"
+
+mkdir -m 700 -p "${CHROMIUM_HOME}"
+mkdir -m 700 -p "${CHROMIUM_CACHE}"
+
+/usr/bin/chromium "${@}"
+
+cleanup
+

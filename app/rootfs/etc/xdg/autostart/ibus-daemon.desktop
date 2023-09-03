@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=ibsu-daemon
+Exec=/usr/bin/ibus-daemon -rxd
+Type=Application

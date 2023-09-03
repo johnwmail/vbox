@@ -1,0 +1,54 @@
+FROM debian:sid
+
+USER 0
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    TERM=xterm
+
+# Install supervisor, VNC, & X11 packages
+RUN set -ex;
+RUN apt-get update && apt-get dist-upgrade -y --no-install-recommends --no-install-suggests;
+RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+  bash bash-completion \
+  novnc supervisor xautolock x11vnc oathtool tightvncpasswd \
+  tigervnc-common tigervnc-standalone-server tigervnc-scraping-server tigervnc-viewer \
+  remmina remmina-plugin-vnc remmina-plugin-rdp curl netcat-traditional \
+  procps net-tools telnet openssh-client dnsutils whois traceroute file mawk sed less \
+  bzip2 unzip unrar-free xz-utils xarchiver \
+  xfce4 xfce4-terminal xfce4-clipman xfce4-clipman-plugin dbus-x11 mousepad galculator \
+  fonts-arphic-uming ibus-gtk3 ibus-gtk ibus-table-quick-classic vim man-db tmux \
+  firefox chromium git python3-pip sshpass docker.io
+
+RUN groupadd -g 1001 novnc
+RUN useradd -m -s /bin/bash -u 1001 -g 1001 novnc
+RUN groupadd docker || true
+RUN usermod -aG docker novnc || true
+
+COPY ./app /app
+COPY ./sid/rootfs/home/novnc /app/rootfs/home/novnc
+RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
+RUN mv /app/noVNC /noVNC
+
+RUN chmod 700 /app
+RUN fc-cache -f
+
+# Setup demo environment variables
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    TERM=xterm \
+    GTK_IM_MODULE=ibus \
+    XMODIFIERS=@im=ibus \
+    QT_IM_MODULE=ibus \
+    DISPLAY=:0.0 \
+    DISPLAY_WIDTH=3840 \
+    DISPLAY_HEIGHT=2560 \
+    NOVNC_PORT=6080 \
+    SSL_NOVNC_PORT=6901 \
+    VNC_PW=novnc
+
+CMD ["/app/entrypoint.sh"]
+EXPOSE $NOVNC_PORT

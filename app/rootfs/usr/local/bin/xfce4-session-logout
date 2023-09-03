@@ -1,0 +1,4 @@
+#!/bin/sh
+
+pkill -u novnc
+/usr/bin/xfce4-session-logout -f -l

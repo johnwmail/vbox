@@ -1,0 +1,2 @@
+# no-sandbox by default
+export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --no-sandbox"
