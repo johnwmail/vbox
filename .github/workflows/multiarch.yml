@@ -14,8 +14,8 @@ on:
 
 jobs:
   release:
-    runs-on: [ amd64, qemu ]
-    container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
+    runs-on: ubuntu-latest
+    #container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
     env: |
       ACTIONS_RUNTIME_TOKEN: ''
 
