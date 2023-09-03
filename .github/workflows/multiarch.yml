@@ -51,7 +51,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker AMD64/ARM64 image for latest
-        if: github.ref == 'refs/heads/main'
         uses: https://github.com/docker/build-push-action@v4
         with:
           context: .
@@ -70,7 +69,6 @@ jobs:
           mv /tmp/.buildx-cache-new.latest /tmp/.buildx-cache.latest
 
       - name: Build and push Docker AMD64/ARM64 image for bookworm
-        if: github.ref == 'refs/heads/main'
         uses: https://github.com/docker/build-push-action@v4
         with:
           context: .
