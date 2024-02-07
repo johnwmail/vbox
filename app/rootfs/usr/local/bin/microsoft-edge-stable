@@ -1,0 +1,23 @@
+#!/bin/sh
+
+export PATH="/usr/bin:/bin"
+
+MSEDGE_HOME="${HOME}/.config/microsoft-edge"
+MSEDGE_CACHE="${HOME}/.cache/microsoft-edge"
+
+cleanup() {
+	rm -rf "$MSEDGE_HOME"
+	rm -rf "$MSEDGE_CACHE"
+}
+
+trap cleanup 0
+trap cleanup 2
+trap cleanup 3
+
+mkdir -m 700 -p "${MSEDGE_HOME}"
+mkdir -m 700 -p "${MSEDGE_CACHE}"
+
+/usr/bin/microsoft-edge-stable --inprivate "${@}"
+
+cleanup
+

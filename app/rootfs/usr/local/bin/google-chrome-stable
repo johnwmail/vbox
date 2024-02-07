@@ -1,0 +1,24 @@
+#!/bin/sh
+
+export PATH="/usr/bin:/bin"
+
+CHROME_HOME="${HOME}/.config/google-chrome"
+CHROME_CACHE="${HOME}/.cache/google-chrome"
+
+cleanup() {
+	rm -rf "$CHROME_HOME"
+	rm -rf "$CHROME_CACHE"
+}
+
+trap cleanup 0
+trap cleanup 2
+trap cleanup 3
+
+mkdir -m 700 -p "${CHROME_HOME}"
+mkdir -m 700 -p "${CHROME_CACHE}"
+touch "${CHROME_HOME}/First Run"
+
+/usr/bin/google-chrome-stable "${@}"
+
+cleanup
+
