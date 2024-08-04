@@ -11,4 +11,6 @@ pref("trailhead.firstrun.didSeeAboutWelcome", true);
 pref("browser.toolbars.bookmarks.visibility", "never");
 pref("browser.laterrun.enabled", true);
 
+pref("datareporting.policy.dataSubmissionPolicyAcceptedVersion", 2);
+pref("datareporting.policy.dataSubmissionPolicyNotifiedTime", "1718623888185");
 

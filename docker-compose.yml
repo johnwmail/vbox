@@ -1,0 +1,29 @@
+#version: "3.9"
+services:
+  debian:
+    image: docker.io/john3box/vbox:latest
+    restart: unless-stopped
+    shm_size: "512mb"
+    mem_limit: 2G
+    cpus: 2
+    #runtime: "sysbox-runc"
+    security_opt:
+      - no-new-privileges
+    cap_drop:
+      - mknod
+      - net_raw 
+      - net_admin 
+      - sys_admin
+    ports:
+      - "0.0.0.0:6080:6080"
+    volumes:
+      - home:/home
+      - docker:/var/lib/docker
+      - ./init.sh:/app/init.sh:ro
+    environment:
+      - TOTP=1
+      - VNC_PW=${SECRET}
+      - TZ=Asia/Hong_Kong
+volumes:
+  home:
+  docker:

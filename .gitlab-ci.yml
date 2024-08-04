@@ -1,0 +1,111 @@
+stages:
+  - build
+  - deploy
+
+.only-default-branch:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    
+before_script:
+  - export BUILD_DATE=$(date +%Y-%m-%d)
+  - docker login -u $FREEBOX -p $DOCKER_HUB_SECRET docker.io
+
+sid:
+  stage: build
+  tags: [ "dind" ]
+  services:
+    - name: docker:24.0.5-dind
+      alias: docker
+  script:
+    - docker buildx create --use
+    - docker buildx build --platform linux/arm64,linux/amd64 
+        --tag $FREEBOX/$CI_PROJECT_NAME:latest
+        --tag $FREEBOX/$CI_PROJECT_NAME:$BUILD_DATE
+        --push -f Dockerfile .
+
+trixie:
+  stage: build
+  when: manual
+  tags:
+    - dind
+  services:
+    - name: docker:24.0.5-dind
+      alias: docker
+  script:
+    - export BUILD_DATE=$(date +%Y%m%d%H%M%S)
+    - docker buildx create --use
+    - docker buildx build --platform linux/arm64,linux/amd64 
+        --tag $FREEBOX/$CI_PROJECT_NAME:latest-trixie
+        --tag $FREEBOX/$CI_PROJECT_NAME:$BUILD_DATE-trixie
+        --push -f Dockerfile.trixie .
+
+deploy-vbox:
+  extends: .only-default-branch
+  stage: deploy
+  when: manual
+  tags:
+    - dind
+    - amd64
+
+  before_script:
+    #- set -x
+    - rm -rf ~/.ssh && mkdir -p -m 0700 ~/.ssh
+    - cp "$SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
+    - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+  script:
+    #- set -x
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/vbox/docker-compose.yml pull"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/vbox/docker-compose.yml down"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/vbox/docker-compose.yml up -d"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker image prune -f"
+
+  after_script:
+    - rm -rf ~/.ssh
+
+deploy-gitea_runner:
+  extends: .only-default-branch
+  stage: deploy
+  when: manual
+  tags: [ "dind", "amd64" ]
+
+  before_script:
+    #- set -x
+    - rm -rf ~/.ssh && mkdir -p -m 0700 ~/.ssh
+    - cp "$SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
+    - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+  script:
+    #- set -x
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitea_runner/docker-compose.yml pull"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitea_runner/docker-compose.yml down"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitea_runner/docker-compose.yml up -d"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker image prune -f"
+
+  after_script:
+    - rm -rf ~/.ssh
+
+deploy-gitlab_runner:
+  extends: .only-default-branch
+  stage: deploy
+  when: manual
+  tags: [ "dind", "amd64" ]
+
+  before_script:
+    #- set -x
+    - rm -rf ~/.ssh && mkdir -p -m 0700 ~/.ssh
+    - cp "$SSH_PRIVATE_KEY" ~/.ssh/id_ed25519
+    - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+  script:
+    #- set -x
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitlab_runner/docker-compose.yml pull"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitlab_runner/docker-compose.yml down"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker-compose -f /opt/docker/local/gitlab_runner/docker-compose.yml up -d"
+    - ssh -i ~/.ssh/id_ed25519 -p 8022 $SSH_HOSTS "docker image prune -f"
+
+  after_script:
+    - rm -rf ~/.ssh

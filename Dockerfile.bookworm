@@ -29,6 +29,8 @@ RUN usermod -aG docker novnc || true
 
 COPY ./app /app
 COPY ./bookworm/rootfs/home/novnc /app/rootfs/home/novnc
+RUN find /app -type d -exec chmod 755 {} \;
+RUN find /app -type f -exec chmod g-w {} \;
 RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
 RUN mv /app/noVNC /noVNC
 
