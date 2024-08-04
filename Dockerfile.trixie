@@ -13,7 +13,7 @@ RUN set -ex;
 RUN apt-get update && apt-get dist-upgrade -y --no-install-recommends --no-install-suggests;
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
   bash bash-completion \
-  novnc supervisor xautolock x11vnc oathtool tightvncpasswd \
+  novnc supervisor x11vnc oathtool tightvncpasswd \
   tigervnc-common tigervnc-standalone-server tigervnc-scraping-server tigervnc-viewer \
   remmina remmina-plugin-vnc remmina-plugin-rdp curl wget netcat-traditional \
   procps net-tools telnet openssh-client dnsutils whois traceroute file mawk sed less \
