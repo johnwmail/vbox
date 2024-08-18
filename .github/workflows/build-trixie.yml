@@ -9,13 +9,12 @@ on:
       - master
     paths-ignore:
       - .gitlib-ci.*
-      - .gitea/workflows/*
-      - .github/workflows/*
+      - .gitea/**
+      - .github/**
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    #container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
 
     steps:
       - name: Checkout
@@ -33,11 +32,10 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             /tmp/.buildx-cache.trixie
-            /tmp/.buildx-cache.latest
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx- 
@@ -48,24 +46,6 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker AMD64/ARM64 image for latest
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          platforms: linux/amd64, linux/arm64
-          push: false
-          tags: |
-            ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:latest
-            ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:${{ env.RELEASE_DATE }}
-          cache-from: type=local,src=/tmp/.buildx-cache.latest
-          cache-to: type=local,dest=/tmp/.buildx-cache-new.latest
-
-      - name: Rotate the cache for latest
-        run: |
-          rm -rf /tmp/.buildx-cache.latest
-          mv /tmp/.buildx-cache-new.latest /tmp/.buildx-cache.latest
 
       - name: Build and push Docker AMD64/ARM64 image for trixie
         uses: docker/build-push-action@v6
@@ -84,3 +64,4 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache.trixie
           mv /tmp/.buildx-cache-new.trixie /tmp/.buildx-cache.trixie
+

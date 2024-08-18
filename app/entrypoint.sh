@@ -4,7 +4,7 @@ set -ex
 VNC_PW=${VNC_PW:-novnc}
 mkdir -p -m 700 /.vnc
 x11vnc -storepasswd "$VNC_PW" /.vnc/passwd
-if [ ! -z ${TOTP} ]; then
+if [ ! -z ${TOTP} -a ${TOTP} -ne 0 ]; then
   /app/vncpw-gen.sh &
 fi
 unset VNC_PW
@@ -17,4 +17,3 @@ fi
 
 unset DEBIAN_FRONTEND
 exec supervisord -c /app/supervisord.conf
-

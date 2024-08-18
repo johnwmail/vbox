@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
   bzip2 unzip unrar-free xz-utils xarchiver \
   xfce4 xfce4-terminal xfce4-clipman xfce4-clipman-plugin dbus-x11 mousepad galculator \
   fonts-arphic-uming ibus-gtk3 ibus-gtk ibus-table-quick-classic vim man-db tmux \
-  firefox chromium git python3-pip sshpass docker.io flameshot
+  firefox chromium git python3-pip sshpass docker.io flameshot gnupg
 
 RUN groupadd -g 1001 novnc
 RUN useradd -m -s /bin/bash -u 1001 -g 1001 novnc
@@ -36,6 +36,16 @@ RUN mv /app/noVNC /noVNC
 
 RUN chmod 700 /app
 RUN fc-cache -f
+
+RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+  google-chrome-stable microsoft-edge-stable
+
+RUN \
+  if [ $(arch) == "x86_64" ]; then \
+    apt-get install -y --no-install-recommends --no-install-suggests code; \
+  fi
+
+RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
 # Setup demo environment variables
 ENV LANG=en_US.UTF-8 \

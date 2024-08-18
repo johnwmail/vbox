@@ -2,14 +2,16 @@ name: Build and release container for SID
 run-name: ${{ gitea.actor }} build
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "8 11 3 * *" # Build once per month
+# schedule:
+#   - cron: "8 11 3 * *" # Build once per month
   push:
     branches:
       - main
       - master
     paths-ignore:
-      - .gitea/workflows/*
+      - .gitea/**
+      - .github/**
+      - .gitlab-ci.*
 
 jobs:
   release:
@@ -24,20 +26,20 @@ jobs:
         run: |
           echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
 
-#     - name: Set up QEMU
-#       uses: https://github.com/docker/setup-qemu-action@v2
+      - name: Set up QEMU
+        uses: https://github.com/docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: https://github.com/docker/setup-buildx-action@v2
 
-      - name: Cache Docker layers
-        uses: https://github.com/actions/cache@v3
-        with:
-          path: |
-            /tmp/.buildx-cache.latest
-          key: ${{ runner.os }}-buildx-${{ gitea.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx- 
+#      - name: Cache Docker layers
+#        uses: https://github.com/actions/cache@v3
+#        with:
+#          path: |
+#            /tmp/.buildx-cache.latest
+#          key: ${{ runner.os }}-buildx-${{ gitea.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx- 
 
       - name: Login to registry
         uses: https://github.com/docker/login-action@v2
@@ -56,12 +58,12 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:latest
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:${{ env.RELEASE_DATE }}
-          cache-from: type=local,src=/tmp/.buildx-cache.latest
-          cache-to: type=local,dest=/tmp/.buildx-cache-new.latest
-
-      - name: Rotate the cache for latest
-        run: |
-          set -x
-          rm -rf /tmp/.buildx-cache.latest
-          mv /tmp/.buildx-cache-new.latest /tmp/.buildx-cache.latest
-
+#          cache-from: type=local,src=/tmp/.buildx-cache.latest
+#          cache-to: type=local,dest=/tmp/.buildx-cache-new.latest
+#
+#      - name: Rotate the cache for latest
+#        run: |
+#          set -x
+#          rm -rf /tmp/.buildx-cache.latest
+#          mv /tmp/.buildx-cache-new.latest /tmp/.buildx-cache.latest
+ 
