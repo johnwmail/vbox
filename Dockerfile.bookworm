@@ -37,14 +37,6 @@ RUN mv /app/noVNC /noVNC
 RUN chmod 700 /app
 RUN fc-cache -f
 
-RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-  google-chrome-stable microsoft-edge-stable
-
-RUN \
-  if [ $(arch) == "x86_64" ]; then \
-    apt-get install -y --no-install-recommends --no-install-suggests code; \
-  fi
-
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
 # Setup demo environment variables
