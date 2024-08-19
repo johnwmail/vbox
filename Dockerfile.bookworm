@@ -37,6 +37,7 @@ RUN mv /app/noVNC /noVNC
 RUN chmod 700 /app
 RUN fc-cache -f
 
+RUN apt-get install -y --no-install-recommends --no-install-suggests code
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
 # Setup demo environment variables

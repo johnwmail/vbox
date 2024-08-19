@@ -12,7 +12,7 @@ chown -R novnc:novnc /.vnc
 chown -R novnc:novnc /home/novnc
 
 if [ -x /app/init.sh ]; then
-  /app/init.sh
+  /app/init.sh &
 fi
 
 unset DEBIAN_FRONTEND
