@@ -15,8 +15,8 @@ on:
 
 jobs:
   release:
-    runs-on: [ amd64 ]
-    container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
+    runs-on: [ actbuildx ]
+    #container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
 
     steps:
       - name: Checkout

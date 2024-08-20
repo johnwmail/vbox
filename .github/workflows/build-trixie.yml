@@ -9,9 +9,9 @@ on:
       - main
       - master
     paths-ignore:
-      - .gitlib-ci.*
       - .gitea/**
       - .github/**
+      - .gitlib-ci.*
 
 jobs:
   release:
