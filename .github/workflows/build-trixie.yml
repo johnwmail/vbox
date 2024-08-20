@@ -53,7 +53,7 @@ jobs:
           context: .
           file: Dockerfile.trixie
           platforms: linux/amd64, linux/arm64
-          push: false
+          push: true
           tags: |
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:trixie
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:trixie-${{ env.RELEASE_DATE }}
