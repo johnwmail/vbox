@@ -53,7 +53,7 @@ jobs:
           context: .
           file: Dockerfile.bookworm
           platforms: linux/amd64, linux/arm64
-          push: false
+          push: true
           tags: |
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:bookworm
             ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:bookworm-${{ env.RELEASE_DATE }}
