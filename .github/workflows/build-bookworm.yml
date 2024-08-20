@@ -1,4 +1,4 @@
-name: Build and release container
+name: Build and release container for bookworm
 
 on:
   workflow_dispatch:
