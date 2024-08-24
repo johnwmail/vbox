@@ -38,7 +38,11 @@ RUN mv /app/noVNC /noVNC
 RUN chmod 700 /app
 RUN fc-cache -f
 
-RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests code
+ENV PACKAGES="code"
+RUN if [ "$(arch)" = "x86_64" ]; then \
+    PACKAGES="$PACKAGES mircosoft-edge-stable google-chrome-stable"; \
+    fi
+RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests $PACKAGES
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
 # Setup demo environment variables
