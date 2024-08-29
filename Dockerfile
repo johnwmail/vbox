@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
   fonts-arphic-uming ibus-gtk3 ibus-gtk ibus-table-quick-classic vim man-db tmux \
   firefox chromium git python3-pip sshpass flameshot gnupg
 
-RUN curl https://get.docker.com | sed -e 's,12,12|trixie,' | bash
 RUN groupadd -g 1001 novnc
 RUN useradd -m -s /bin/bash -u 1001 -g 1001 novnc
 RUN groupadd docker || true
@@ -34,10 +33,10 @@ RUN find /app -type d -exec chmod 755 {} \;
 RUN find /app -type f -exec chmod g-w {} \;
 RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
 RUN mv /app/noVNC /noVNC
-
 RUN chmod 700 /app
 RUN fc-cache -f
 
+RUN curl https://get.docker.com | sed -e 's,12,12|trixie,' | bash
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests code
 RUN if [ "$(arch)" = "x86_64" ]; then \
     apt-get install -y --no-install-recommends --no-install-suggests microsoft-edge-stable google-chrome-stable; \
