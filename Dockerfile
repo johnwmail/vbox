@@ -40,7 +40,7 @@ RUN fc-cache -f
 
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests code
 RUN if [ "$(arch)" = "x86_64" ]; then \
-    apt-get install -y --no-install-recommends --no-install-suggests microsoft-edge-stable google-chrome-stable"; \
+    apt-get install -y --no-install-recommends --no-install-suggests microsoft-edge-stable google-chrome-stable; \
     fi
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
