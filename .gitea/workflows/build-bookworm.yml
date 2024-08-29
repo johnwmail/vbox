@@ -12,10 +12,12 @@ on:
       - .gitea/**
       - .github/**
       - .gitlab-ci.*
+      - .drone.*
+      - .drone/**
 
 jobs:
   release:
-    runs-on: [ actbuildx ]
+    runs-on: [ rootful ]
     #container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
 
     steps:
