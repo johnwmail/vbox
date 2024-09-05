@@ -15,6 +15,7 @@ services:
       - sys_admin
     ports:
       - "0.0.0.0:6080:6080"
+      - "0.0.0.0:6901:6901"
     volumes:
       - home:/home
 #     - docker:/var/lib/docker
@@ -23,6 +24,20 @@ services:
       - TOTP=0
       - VNC_PW=$SERECT
       - TZ=Asia/Hong_Kong
+    hostname: vbox
+    extra_hosts:
+      - "www.example.net:1.2.3.4"
+      - "internal.dev:10.123.234.10"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    networks:
+      vbox:
 volumes:
   home:
 # docker:
+
+networks:
+  vbox:
+    external: false
+    name: vbox

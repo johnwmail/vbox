@@ -1,0 +1,53 @@
+---
+kind: pipeline
+name: default
+type: docker
+
+steps:
+- name: buildx sid
+  image: docker:27-dind
+  #volumes:
+  #- name: dockersock
+  #  path: /var/run
+  commands:
+    - export RELEASE_DATE=$(date +%Y-%m-%d)
+    - echo "$PASSWORD" | docker login -u $USERNAME --password-stdin docker.io
+  #  - sleep 5 # give docker enough time to start
+    - docker buildx create --use
+    - |
+      docker buildx build --platform linux/arm64,linux/amd64 \
+        -t $DOCKER_REPO/$DRONE_REPO_NAME:latest \
+        -t $DOCKER_REPO/$DRONE_REPO_NAME:$RELEASE_DATE \
+        --push -f Dockerfile .
+  environment:
+    USERNAME:
+      from_secret: DOCKER_USERNAME
+    PASSWORD:
+      from_secret: DOCKER_PASSWORD
+    DOCKER_REPO:
+      from_secret: DOCKER_REPO
+
+#services:
+#- name: docker
+#  image: docker:27-dind
+#  privileged: false
+#  detach: true
+#  volumes:
+#  - name: dockersock
+#    path: /var/run
+#
+#volumes:
+#- name: dockersock
+#  temp: {}
+
+platform:
+  os: linux
+  arch: arm64
+node:
+  hostname: arm64
+  
+trigger:
+  branch:
+  - drone-ci/arm64
+  ref:
+  - refs/heads/drone-ci/*
