@@ -18,7 +18,7 @@ mkdir -m 700 -p "${CHROME_HOME}"
 mkdir -m 700 -p "${CHROME_CACHE}"
 touch "${CHROME_HOME}/First Run"
 
-/usr/bin/google-chrome-stable "${@}"
+/usr/bin/google-chrome-stable --incognito "${@}"
 
 cleanup
 

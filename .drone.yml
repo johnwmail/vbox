@@ -6,13 +6,9 @@ type: docker
 steps:
 - name: buildx sid
   image: docker:27-dind
-  #volumes:
-  #- name: dockersock
-  #  path: /var/run
   commands:
     - export RELEASE_DATE=$(date +%Y-%m-%d)
     - echo "$PASSWORD" | docker login -u $USERNAME --password-stdin docker.io
-  #  - sleep 5 # give docker enough time to start
     - docker buildx create --use
     - |
       docker buildx build --platform linux/arm64,linux/amd64 \
@@ -26,19 +22,6 @@ steps:
       from_secret: DOCKER_PASSWORD
     DOCKER_REPO:
       from_secret: DOCKER_REPO
-
-#services:
-#- name: docker
-#  image: docker:27-dind
-#  privileged: false
-#  detach: true
-#  volumes:
-#  - name: dockersock
-#    path: /var/run
-#
-#volumes:
-#- name: dockersock
-#  temp: {}
 
 platform:
   os: linux
