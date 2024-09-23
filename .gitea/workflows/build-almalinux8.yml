@@ -1,0 +1,40 @@
+name: Build and release container on rootless buildx for almalinux8
+run-name: ${{ gitea.actor }} rootless buildx
+on:
+  workflow_dispatch:
+# schedule:
+#   - cron: "8 11 3 * *" # Build once per month
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - .gitea/**
+      - .github/**
+      - .gitlab-ci.*
+      - .drone.*
+      - .drone/**
+
+jobs:
+  release:
+    runs-on: "arm64"
+    #container: ${{ secrets.DOCKER_REPO }}/actbuildx:latest
+
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+     
+      - name: Set RELEASE_DATE
+        run: |
+          echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
+
+      - name: Buildx
+        run: |
+          set -x
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} docker.io
+          docker buildx create --use
+          docker buildx build --platform linux/arm64,linux/amd64 \
+            -t ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:almalinux8 \
+            -t ${{ secrets.DOCKER_REPO }}/${{ github.event.repository.name }}:almalinux8-${{ env.RELEASE_DATE }} \
+            --push -f Dockerfile.almalinux8 .          
+

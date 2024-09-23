@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# Execute Xorg.wrap if it exists otherwise execute Xorg directly.
+# This allows distros to put the suid wrapper in a separate package.
+
+#/usr/bin/Xvnc  :0 -depth 24 -geometry 1920x1080 -pn -rfbauth /boot/.vnc/passwd -rfbport 5900 -rfbunixpath /tmp/.X11-unix/vnc.sock -rfbunixmode 438 -rfbwait 30000 -BlacklistTimeout 0 -BlacklistThreshold 20
+#/usr/bin/X -- vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3
+
+_args=":0 -depth 24 -geometry 1920x1080 -rfbauth /.vnc/passwd -rfbunixpath /tmp/.X11-unix/vnc.sock -rfbunixmode 438 -localhost"
+_dm=""
+
+if echo "$@" | grep -q gdm ; then
+	_dm="gdm"
+	_displayfd=$(echo $@ | sed -e 's,.*-displayfd \([0-9]*\).*,\1,')
+	_auth=$(echo $@ | sed -e 's,.*\(/run/user/[0-9]*/gdm/Xauthority\).*,\1,')
+	_args="${_args} -displayfd ${_displayfd} -auth ${_auth}"
+elif echo "$@" | grep -q slim; then
+	_dm="slim"
+	_auth=$(echo $@ | sed -e 's,.*-auth \(.*slim\.auth\).*,\1,')
+	_args="${_args} -auth ${_auth}"
+fi
+
+log="/tmp/xorg.log"
+now="$(date)"
+
+echo "$now: $0 logging ---------------------------------------------|" > "$log"
+echo "$now: $0 -- $@" >> "$log"
+echo "$now: ($_dm) /usr/bin/Xvnc -- $_args" >> "$log"
+
+exec /usr/bin/Xvnc ${_args}
+exit 0
+
+#!/bin/sh
+#
+# Execute Xorg.wrap if it exists otherwise execute Xorg directly.
+# This allows distros to put the suid wrapper in a separate package.
+
+#basedir=/usr/libexec
+#if [ -x "$basedir"/Xorg.wrap ]; then
+#        exec "$basedir"/Xorg.wrap "$@"
+#else
+#        exec "$basedir"/Xorg "$@"
+#fi
+
+
+#Sat Jun  8 05:41:02 UTC 2024: /usr/bin/X logging ---------------------------------------------|
+#Sat Jun  8 05:41:02 UTC 2024: /usr/bin/X -- vt2 -displayfd 3 -auth /run/user/1001/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3
+#Sat Jun  8 05:41:02 UTC 2024: (gdm) /usr/bin/Xvnc -- :0 -depth 24 -geometry 1920x1080 -rfbauth /.vnc/passwd -rfbunixpath /tmp/.X11-unix/vnc.sock -rfbunixmode 438 -localhost -displayfd 3 -auth /run/user/1001/gdm/Xauthority
+

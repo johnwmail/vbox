@@ -20,5 +20,4 @@ if [ -x /app/init.sh ]; then
   /app/init.sh &
 fi
 
-unset DEBIAN_FRONTEND
-exec supervisord -c /app/supervisord.conf
+exec /sbin/init

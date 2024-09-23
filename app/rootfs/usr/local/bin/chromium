@@ -18,7 +18,13 @@ CHROMIUM_CACHE="${HOME}/.cache/chromium"
 mkdir -m 700 -p "${CHROMIUM_HOME}"
 mkdir -m 700 -p "${CHROMIUM_CACHE}"
 
-/usr/bin/chromium "${@}"
+if [ -x /usr/bin/chromium-browser ]; then
+  PROG="/usr/bin/chromium-browser"
+else
+  PROG="/usr/bin/chromium"
+fi
+
+"$PROG" --password-store=basic --no-first-run --disable-gpu "${@}"
 
 cleanup
 
