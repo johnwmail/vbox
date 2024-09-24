@@ -20,6 +20,7 @@ services:
       - home:/home
 #     - docker:/var/lib/docker
 #     - ./init.sh:/app/init.sh:ro
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - TOTP=0
       - VNC_PW=$SERECT

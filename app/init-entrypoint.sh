@@ -11,11 +11,6 @@ unset VNC_PW
 chown -R novnc:novnc /.vnc
 chown -R novnc:novnc /home/novnc
 
-if [ ! -z "${TZ}" ]; then
-  [ -f "/usr/share/zoneinfo/${TZ}" ] && \
-  ln -sf "/usr/share/zoneinfo/${TZ}" /etc/localtime
-fi
-
 if [ -x /app/init.sh ]; then
   /app/init.sh &
 fi
