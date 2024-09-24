@@ -24,7 +24,7 @@ else
   PROG="/usr/bin/chromium"
 fi
 
-"$PROG" --password-store=basic --no-first-run --disable-gpu "${@}"
+"$PROG" --no-sandbox --password-store=basic --no-first-run --disable-gpu "${@}"
 
 cleanup
 
