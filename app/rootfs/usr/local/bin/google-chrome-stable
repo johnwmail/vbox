@@ -16,9 +16,8 @@ trap cleanup 3
 
 mkdir -m 700 -p "${CHROME_HOME}"
 mkdir -m 700 -p "${CHROME_CACHE}"
-touch "${CHROME_HOME}/First Run"
 
-/usr/bin/google-chrome-stable --incognito "${@}"
+/usr/bin/google-chrome-stable --incognito --password-store=basic --no-first-run "${@}"
 
 cleanup
 

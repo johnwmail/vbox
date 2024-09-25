@@ -2,6 +2,5 @@
 
 export PATH="/usr/bin:/bin"
 
-exec /usr/share/code/code --no-sandbox "${@}"
-
+exec /usr/share/code/bin/code --no-sandbox --password-store=basic --disable-gpu "${@}"
 

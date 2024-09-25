@@ -48,6 +48,10 @@ RUN systemctl set-default graphical.target
 RUN systemctl disable gdm
 RUN systemctl enable lightdm
 RUN systemctl enable supervisord
+RUN systemctl unmask systemd-logind
+
+# re-run it to avoid /usr/local/bin/code removed while installing it
+RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
 
 # Setup demo environment variables
 ENV LANG=en_US.UTF-8 \

@@ -43,6 +43,9 @@ RUN if [ "$(arch)" = "x86_64" ]; then \
     fi
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives && apt-get clean
 
+# re-run it to avoid /usr/local/bin/code removed while installing it
+RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
+
 # Setup demo environment variables
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \

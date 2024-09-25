@@ -17,7 +17,7 @@ trap cleanup 3
 mkdir -m 700 -p "${MSEDGE_HOME}"
 mkdir -m 700 -p "${MSEDGE_CACHE}"
 
-/usr/bin/microsoft-edge-stable --inprivate "${@}"
+/usr/bin/microsoft-edge-stable --inprivate --password-store=basic --no-first-run "${@}"
 
 cleanup
 
