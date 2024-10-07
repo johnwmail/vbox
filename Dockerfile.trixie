@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --no-install-su
   tigervnc-common tigervnc-standalone-server tigervnc-scraping-server tigervnc-viewer \
   remmina remmina-plugin-vnc remmina-plugin-rdp curl wget netcat-traditional \
   procps net-tools telnet openssh-client dnsutils whois traceroute file mawk sed less \
-  bzip2 unzip unrar-free xz-utils xarchiver \
+  bzip2 zip unzip unrar-free xz-utils xarchiver \
   xfce4 xfce4-terminal xfce4-clipman xfce4-clipman-plugin dbus-x11 mousepad galculator \
   fonts-arphic-uming ibus-gtk3 ibus-gtk ibus-table-quick-classic vim man-db tmux \
   firefox-esr chromium git python3-pip sshpass flameshot gnupg

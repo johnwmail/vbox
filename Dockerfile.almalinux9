@@ -17,7 +17,7 @@ RUN dnf install -y \
   novnc supervisor x11vnc oathtool \
   tigervnc tigervnc-server \ 
   remmina wget netcat net-tools telnet openssh-clients dnsutils whois traceroute \
-  procps file gawk sed less bzip2 unzip unrar-free xz \
+  procps file gawk sed less bzip2 zip unzip unrar-free xz \
   lightdm gnome-shell gnome-session gnome-terminal dbus-x11 mousepad gnome-calculator \
   google-noto-cjk-fonts-common google-noto-sans-cjk-ttc-fonts google-noto-serif-cjk-ttc-fonts ibus-table-chinese-quick \
   vim man-db tmux git python3-pip sshpass gnupg firefox chromium
