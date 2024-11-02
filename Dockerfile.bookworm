@@ -2,8 +2,9 @@ FROM debian:bookworm
 
 USER 0
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    LANG=en_US.UTF-8 \
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=C.UTF-8 \
     TERM=xterm
@@ -61,5 +62,6 @@ ENV LANG=en_US.UTF-8 \
     SSL_NOVNC_PORT=6901 \
     VNC_PW=novnc
 
-CMD ["/app/entrypoint.sh"]
 EXPOSE $NOVNC_PORT
+ENTRYPOINT ["/app/entrypoint.sh"]
+

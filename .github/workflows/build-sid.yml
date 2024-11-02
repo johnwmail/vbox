@@ -3,7 +3,7 @@ name: Build and release container for sid
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 8 8 * *' # 08:00 on 8th
+    - cron: '0 5 5 * *' # 05:00 on 5th
   push:
     branches:
       - main
@@ -52,7 +52,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile
+          file: Dockerfile.sid
           platforms: linux/amd64, linux/arm64
           push: true
           tags: |

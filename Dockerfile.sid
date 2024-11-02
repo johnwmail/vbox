@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM debian:sid
 
 USER 0
 
@@ -14,14 +14,14 @@ RUN set -ex;
 RUN apt-get update && apt-get dist-upgrade -y --no-install-recommends --no-install-suggests;
 RUN apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
   bash bash-completion \
-  novnc supervisor x11vnc oathtool tightvncpasswd \
+  novnc supervisor xautolock x11vnc oathtool tightvncpasswd \
   tigervnc-common tigervnc-standalone-server tigervnc-scraping-server tigervnc-viewer \
   remmina remmina-plugin-vnc remmina-plugin-rdp curl wget netcat-traditional \
   procps net-tools telnet openssh-client dnsutils whois traceroute file mawk sed less \
   bzip2 zip unzip unrar-free xz-utils xarchiver \
   xfce4 xfce4-terminal xfce4-clipman xfce4-clipman-plugin dbus-x11 mousepad galculator \
   fonts-arphic-uming ibus-gtk3 ibus-gtk ibus-table-quick-classic vim man-db tmux \
-  firefox-esr chromium git python3-pip sshpass flameshot gnupg
+  firefox chromium git python3-pip sshpass flameshot gnupg
 
 RUN groupadd -g 1001 novnc
 RUN useradd -m -s /bin/bash -u 1001 -g 1001 novnc
@@ -29,7 +29,7 @@ RUN groupadd docker || true
 RUN usermod -aG docker novnc || true
 
 COPY ./app /app
-COPY ./trixie/rootfs/home/novnc /app/rootfs/home/novnc
+COPY ./sid/rootfs/home/novnc /app/rootfs/home/novnc
 RUN find /app -type d -exec chmod 755 {} \;
 RUN find /app -type f -exec chmod g-w {} \;
 RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
