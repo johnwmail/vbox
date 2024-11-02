@@ -52,6 +52,7 @@ RUN systemctl unmask systemd-logind
 
 # re-run it to avoid /usr/local/bin/code removed while installing it
 RUN tar -C /app/rootfs -cf - . | tar -C / -xf -
+RUN mv /app/entrypoint.sh.almalinux /app/entrypoint.sh
 
 # Setup demo environment variables
 ENV LANG=en_US.UTF-8 \
